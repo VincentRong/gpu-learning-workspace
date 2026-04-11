@@ -1,0 +1,149 @@
+{
+  "title": "12-Week GPU Programming Learning Plan",
+  "track": "CUDA + LLM",
+  "weekly_hours": "6-8",
+  "learning_style": "project-driven",
+  "environment_snapshot": {
+    "captured_on": "2026-04-11",
+    "host_os": "Windows",
+    "gpu": "NVIDIA GeForce RTX 3070 8GB",
+    "driver_cuda_version": "12.9",
+    "host_python": "3.12.5",
+    "wsl_distribution": "Ubuntu 24.04.1 LTS",
+    "wsl_version": 2,
+    "wsl_python": "3.12.3",
+    "wsl_gpu_visible": true,
+    "wsl_nvcc_installed": false
+  },
+  "acceptance_criteria": {
+    "3": "Explain warp, block, host-device copy, and why GPU programming is throughput-oriented.",
+    "6": "Implement and debug at least three CUDA kernels and explain race conditions, shared memory, and coalescing.",
+    "8": "Map GEMM, softmax, layernorm, and attention to their dominant hardware bottlenecks.",
+    "10": "Run at least one Triton tutorial and explain what Triton abstracts compared with raw CUDA.",
+    "12": "Finish one mini project with runnable code, benchmark data, and a short optimization narrative."
+  },
+  "weeks": [
+    {
+      "week": 1,
+      "title": "Environment and workflow",
+      "note": "notes/week-01-environment-and-workflow.md",
+      "artifacts": [
+        "README.md",
+        "docs/setup/wsl-ubuntu-cuda.md",
+        "scripts/verify_windows_gpu.ps1",
+        "scripts/verify_wsl_gpu.sh"
+      ]
+    },
+    {
+      "week": 2,
+      "title": "Math refresh and GPU mental model",
+      "note": "notes/week-02-gpu-math-and-execution-model.md",
+      "artifacts": [
+        "docs/foundations/math-refresh.md",
+        "docs/foundations/gpu-mental-model.md",
+        "labs/cuda/00_hello_cuda/README.md",
+        "labs/cuda/00_hello_cuda/hello.cu"
+      ]
+    },
+    {
+      "week": 3,
+      "title": "First kernels and reduction",
+      "note": "notes/week-03-first-kernels-and-reduction.md",
+      "artifacts": [
+        "labs/cuda/01_vector_add/README.md",
+        "labs/cuda/02_saxpy/README.md",
+        "labs/cuda/03_reduction/README.md"
+      ]
+    },
+    {
+      "week": 4,
+      "title": "Memory hierarchy and coalescing",
+      "note": "notes/week-04-memory-hierarchy-and-coalescing.md",
+      "artifacts": [
+        "labs/cuda/03_reduction/reduction_sum.cu",
+        "docs/foundations/gpu-mental-model.md",
+        "labs/cuda/04_matmul_naive/README.md"
+      ]
+    },
+    {
+      "week": 5,
+      "title": "Matmul and tiling",
+      "note": "notes/week-05-matmul-and-tiling.md",
+      "artifacts": [
+        "labs/cuda/04_matmul_naive/matmul_naive.cu",
+        "labs/cuda/05_matmul_tiled/README.md",
+        "benchmarks/templates/benchmark-template.csv"
+      ]
+    },
+    {
+      "week": 6,
+      "title": "Profiling and kernel optimization",
+      "note": "notes/week-06-profiling-and-kernel-optimization.md",
+      "artifacts": [
+        "benchmarks/README.md",
+        "benchmarks/nsight/README.md",
+        "labs/cuda/05_matmul_tiled/matmul_tiled.cu"
+      ]
+    },
+    {
+      "week": 7,
+      "title": "Softmax and layernorm",
+      "note": "notes/week-07-softmax-and-layernorm.md",
+      "artifacts": [
+        "docs/llm/kernel-hotspots.md",
+        "labs/cuda/06_softmax_rowwise/README.md",
+        "labs/cuda/07_layernorm_rowwise/README.md"
+      ]
+    },
+    {
+      "week": 8,
+      "title": "Attention and LLM hotspots",
+      "note": "notes/week-08-attention-and-llm-hotspots.md",
+      "artifacts": [
+        "docs/llm/kernel-hotspots.md",
+        "docs/capstone-options.md",
+        "labs/cuda/07_layernorm_rowwise/layernorm_rowwise.cu"
+      ]
+    },
+    {
+      "week": 9,
+      "title": "PyTorch custom CUDA op",
+      "note": "notes/week-09-pytorch-custom-cuda-op.md",
+      "artifacts": [
+        "docs/setup/pytorch-triton.md",
+        "labs/framework/01_torch_custom_op/README.md"
+      ]
+    },
+    {
+      "week": 10,
+      "title": "Triton kernels",
+      "note": "notes/week-10-triton-kernels.md",
+      "artifacts": [
+        "labs/triton/01_vector_add/README.md",
+        "labs/triton/02_fused_softmax/README.md",
+        "docs/setup/pytorch-triton.md"
+      ]
+    },
+    {
+      "week": 11,
+      "title": "Capstone build",
+      "note": "notes/week-11-capstone-implementation.md",
+      "artifacts": [
+        "docs/capstone-options.md",
+        "benchmarks/templates/benchmark-template.csv",
+        "notes/templates/weekly-review.md"
+      ]
+    },
+    {
+      "week": 12,
+      "title": "Benchmark, write-up, and retrospective",
+      "note": "notes/week-12-capstone-benchmark-and-retrospective.md",
+      "artifacts": [
+        "docs/resources.md",
+        "benchmarks/README.md",
+        "notes/templates/weekly-review.md"
+      ]
+    }
+  ]
+}
+
