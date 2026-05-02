@@ -1,0 +1,7 @@
+date,lab,input_shape,launch_config,elapsed_ms,correct,notes
+2026-04-30,softmax_rowwise,4096x256,one block per row; 256 threads,0.0640,yes,"CUDA event average over 50 launches after 5 warmup launches; max_error=0.00000001"
+2026-04-30,softmax_rowwise,4096x512,one block per row; 256 threads,0.1755,yes,"CUDA event average over 50 launches after 5 warmup launches; max_error=0.00000001"
+2026-04-30,softmax_rowwise,4096x1024,one block per row; 256 threads,0.2317,yes,"CUDA event average over 50 launches after 5 warmup launches; max_error=0.00000001"
+2026-04-30,layernorm_rowwise,4096x256,one block per row; 256 threads,0.2294,yes,"CUDA event average over 50 launches after 5 warmup launches; max_error=0.00000083"
+2026-04-30,layernorm_rowwise,4096x512,one block per row; 256 threads,0.2501,yes,"CUDA event average over 50 launches after 5 warmup launches; max_error=0.00000167"
+2026-04-30,layernorm_rowwise,4096x1024,one block per row; 256 threads,0.2299,yes,"CUDA event average over 50 launches after 5 warmup launches; max_error=0.00000310"

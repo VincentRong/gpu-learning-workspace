@@ -1,0 +1,3 @@
+date,lab,input_shape,launch_config,elapsed_ms,correct,notes
+2026-04-29,matmul_naive,1024x1024x1024,16x16 block,2.2060,yes,"CUDA event average over 20 kernel launches after 5 warmup launches; RTX 3070; max_error=0.000000"
+2026-04-29,matmul_tiled,1024x1024x1024,16x16 tile,1.3906,yes,"CUDA event average over 20 kernel launches after 5 warmup launches; RTX 3070; max_error=0.000000; 1.59x faster than naive"

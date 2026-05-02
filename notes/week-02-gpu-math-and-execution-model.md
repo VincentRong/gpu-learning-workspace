@@ -19,7 +19,8 @@ feel concrete.
 ## Deliverables
 
 - One page of notes on thread/block/grid
-- A short explanation of why warp divergence hurts throughput
+- A short explanation of why warp 
+divergence hurts throughput
 
 ## Exit criteria
 

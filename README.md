@@ -24,6 +24,10 @@ As of `2026-04-11`, this plan is tailored to the machine we inspected:
 4. Start with [notes/week-01-environment-and-workflow.md](notes/week-01-environment-and-workflow.md).
 5. Each week, finish the note, run the linked lab, and record benchmark results.
 
+If you need a compressed path, use
+[docs/accelerated-6-day-plan.md](docs/accelerated-6-day-plan.md) to sprint
+through the highest-value material first.
+
 ## Workspace layout
 
 - `curriculum/plan.json`: machine-tailored 12-week curriculum metadata
@@ -61,4 +65,3 @@ Use the same weekly cadence every week:
 - Monday or Tuesday: read the note and linked docs
 - Mid-week: run the lab and capture one screenshot or benchmark
 - Weekend: fill the review template and choose next week's stretch goal
-

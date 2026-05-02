@@ -13,3 +13,6 @@ Each weekly note is your working document for that week.
 Use [notes/templates/weekly-review.md](templates/weekly-review.md) every week,
 starting from Week 1.
 
+For an always-up-to-date study log across weeks, keep
+[notes/progress-tracker.md](progress-tracker.md) current as you finish major
+setup steps, labs, and checkpoints.

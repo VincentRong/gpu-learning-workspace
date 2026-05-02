@@ -12,8 +12,14 @@ nvcc -O2 -std=c++17 matmul_naive.cu -o matmul_naive
 ./matmul_naive
 ```
 
+The default run benchmarks a `1024x1024x1024` multiply using CUDA events. You
+can pass a custom shape as `m n k`:
+
+```bash
+./matmul_naive 512 512 512
+```
+
 ## Study prompt
 
 After it works, explain why this version reloads the same `A` and `B` values
 many times.
-

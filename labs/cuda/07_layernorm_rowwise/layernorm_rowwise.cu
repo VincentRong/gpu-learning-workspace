@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <vector>
 #include <cuda_runtime.h>
 
@@ -85,11 +86,18 @@ static void layernorm_cpu(const std::vector<float>& input, std::vector<float>& o
     }
 }
 
-int main() {
-    constexpr int rows = 8;
-    constexpr int cols = 256;
+int main(int argc, char** argv) {
+    const int rows = argc > 1 ? std::atoi(argv[1]) : 8;
+    const int cols = argc > 2 ? std::atoi(argv[2]) : 256;
     constexpr int threads = 256;
     constexpr float eps = 1e-5f;
+    constexpr int warmup_iterations = 5;
+    constexpr int benchmark_iterations = 50;
+
+    if (cols > 1024) {
+        std::fprintf(stderr, "starter version expects cols <= 1024, got %d\n", cols);
+        return 1;
+    }
 
     std::vector<float> host_input(rows * cols);
     for (int i = 0; i < rows * cols; ++i) {
@@ -105,9 +113,29 @@ int main() {
     check_cuda(cudaMalloc(&dev_output, host_output.size() * sizeof(float)), "cudaMalloc(dev_output)");
     check_cuda(cudaMemcpy(dev_input, host_input.data(), host_input.size() * sizeof(float), cudaMemcpyHostToDevice), "copy input");
 
-    layernorm_rowwise_kernel<<<rows, threads, threads * sizeof(float)>>>(dev_input, dev_output, rows, cols, eps);
-    check_cuda(cudaGetLastError(), "layernorm launch");
-    check_cuda(cudaDeviceSynchronize(), "layernorm sync");
+    for (int i = 0; i < warmup_iterations; ++i) {
+        layernorm_rowwise_kernel<<<rows, threads, threads * sizeof(float)>>>(dev_input, dev_output, rows, cols, eps);
+    }
+    check_cuda(cudaGetLastError(), "layernorm warmup launch");
+    check_cuda(cudaDeviceSynchronize(), "layernorm warmup sync");
+
+    cudaEvent_t start;
+    cudaEvent_t stop;
+    check_cuda(cudaEventCreate(&start), "cudaEventCreate(start)");
+    check_cuda(cudaEventCreate(&stop), "cudaEventCreate(stop)");
+
+    check_cuda(cudaEventRecord(start), "cudaEventRecord(start)");
+    for (int i = 0; i < benchmark_iterations; ++i) {
+        layernorm_rowwise_kernel<<<rows, threads, threads * sizeof(float)>>>(dev_input, dev_output, rows, cols, eps);
+    }
+    check_cuda(cudaEventRecord(stop), "cudaEventRecord(stop)");
+    check_cuda(cudaGetLastError(), "layernorm benchmark launch");
+    check_cuda(cudaEventSynchronize(stop), "cudaEventSynchronize(stop)");
+
+    float elapsed_ms = 0.0f;
+    check_cuda(cudaEventElapsedTime(&elapsed_ms, start, stop), "cudaEventElapsedTime");
+    const float avg_elapsed_ms = elapsed_ms / benchmark_iterations;
+
     check_cuda(cudaMemcpy(host_output.data(), dev_output, host_output.size() * sizeof(float), cudaMemcpyDeviceToHost), "copy output");
 
     layernorm_cpu(host_input, cpu_output, rows, cols, eps);
@@ -116,8 +144,17 @@ int main() {
         max_error = std::max(max_error, std::fabs(host_output[i] - cpu_output[i]));
     }
 
-    std::printf("layernorm_rowwise max_error=%.8f rows=%d cols=%d\n", max_error, rows, cols);
+    std::printf(
+        "layernorm_rowwise rows=%d cols=%d threads=%d avg_elapsed_ms=%.4f max_error=%.8f iterations=%d\n",
+        rows,
+        cols,
+        threads,
+        avg_elapsed_ms,
+        max_error,
+        benchmark_iterations);
 
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
     cudaFree(dev_input);
     cudaFree(dev_output);
     return max_error > 1e-4f ? 1 : 0;

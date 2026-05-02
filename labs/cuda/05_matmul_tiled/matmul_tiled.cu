@@ -1,5 +1,6 @@
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <vector>
 #include <cuda_runtime.h>
 
@@ -44,11 +45,13 @@ __global__ void matmul_tiled_kernel(const float* a, const float* b, float* c, in
     }
 }
 
-int main() {
-    constexpr int m = 256;
-    constexpr int n = 256;
-    constexpr int k = 256;
+int main(int argc, char** argv) {
+    const int m = argc > 1 ? std::atoi(argv[1]) : 1024;
+    const int n = argc > 2 ? std::atoi(argv[2]) : m;
+    const int k = argc > 3 ? std::atoi(argv[3]) : m;
     constexpr int tile = 16;
+    constexpr int warmup_iterations = 5;
+    constexpr int benchmark_iterations = 20;
 
     std::vector<float> host_a(m * k, 1.0f);
     std::vector<float> host_b(k * n, 2.0f);
@@ -68,9 +71,29 @@ int main() {
     dim3 threads(tile, tile);
     dim3 blocks((n + tile - 1) / tile, (m + tile - 1) / tile);
 
-    matmul_tiled_kernel<tile><<<blocks, threads>>>(dev_a, dev_b, dev_c, m, n, k);
-    check_cuda(cudaGetLastError(), "matmul_tiled launch");
-    check_cuda(cudaDeviceSynchronize(), "matmul_tiled sync");
+    for (int i = 0; i < warmup_iterations; ++i) {
+        matmul_tiled_kernel<tile><<<blocks, threads>>>(dev_a, dev_b, dev_c, m, n, k);
+    }
+    check_cuda(cudaGetLastError(), "matmul_tiled warmup launch");
+    check_cuda(cudaDeviceSynchronize(), "matmul_tiled warmup sync");
+
+    cudaEvent_t start;
+    cudaEvent_t stop;
+    check_cuda(cudaEventCreate(&start), "cudaEventCreate(start)");
+    check_cuda(cudaEventCreate(&stop), "cudaEventCreate(stop)");
+
+    check_cuda(cudaEventRecord(start), "cudaEventRecord(start)");
+    for (int i = 0; i < benchmark_iterations; ++i) {
+        matmul_tiled_kernel<tile><<<blocks, threads>>>(dev_a, dev_b, dev_c, m, n, k);
+    }
+    check_cuda(cudaEventRecord(stop), "cudaEventRecord(stop)");
+    check_cuda(cudaGetLastError(), "matmul_tiled benchmark launch");
+    check_cuda(cudaEventSynchronize(stop), "cudaEventSynchronize(stop)");
+
+    float elapsed_ms = 0.0f;
+    check_cuda(cudaEventElapsedTime(&elapsed_ms, start, stop), "cudaEventElapsedTime");
+    const float avg_elapsed_ms = elapsed_ms / benchmark_iterations;
+
     check_cuda(cudaMemcpy(host_c.data(), dev_c, host_c.size() * sizeof(float), cudaMemcpyDeviceToHost), "copy c");
 
     float max_error = 0.0f;
@@ -79,11 +102,21 @@ int main() {
         max_error = std::max(max_error, std::fabs(value - expected));
     }
 
-    std::printf("matmul_tiled max_error=%.6f expected=%.1f tile=%d\n", max_error, expected, tile);
+    std::printf(
+        "matmul_tiled shape=%dx%dx%d tile=%d avg_elapsed_ms=%.4f max_error=%.6f expected=%.1f iterations=%d\n",
+        m,
+        n,
+        k,
+        tile,
+        avg_elapsed_ms,
+        max_error,
+        expected,
+        benchmark_iterations);
 
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
     cudaFree(dev_a);
     cudaFree(dev_b);
     cudaFree(dev_c);
     return max_error > 1e-4f ? 1 : 0;
 }
-
