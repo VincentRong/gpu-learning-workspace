@@ -27,14 +27,15 @@ def softmax_kernel(
     tl.store(output_start + col_offsets, softmax, mask=mask)
 
 
-def fused_softmax(x: torch.Tensor) -> torch.Tensor:
+def fused_softmax(x: torch.Tensor, num_warps: int | None = None) -> torch.Tensor:
     assert x.is_cuda
     assert x.ndim == 2
 
     rows, cols = x.shape
     output = torch.empty_like(x)
     block_size = triton.next_power_of_2(cols)
-    num_warps = 4 if block_size <= 1024 else 8
+    if num_warps is None:
+        num_warps = 4 if block_size <= 1024 else 8
 
     softmax_kernel[(rows,)](
         x,
@@ -58,4 +59,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

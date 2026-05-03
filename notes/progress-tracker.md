@@ -1,6 +1,6 @@
 # GPU Learning Progress Tracker
 
-Last updated: 2026-04-30
+Last updated: 2026-05-02
 
 ## Current status
 
@@ -8,9 +8,9 @@ Last updated: 2026-04-30
 - Week 2 math and execution model: completed at sprint level
 - Week 3 first kernels and reduction: completed at sprint level
 - Week 4-5 memory hierarchy and matmul: benchmarked
-- Current focus: LLM-style kernels: softmax, layernorm, and attention patterns
+- Current focus: capstone polish and review
 - Active study mode: accelerated 6-day sprint
-- Current sprint position: Day 5 started
+- Current sprint position: sprint completed; capstone first pass completed
 
 ## Completed checkpoints
 
@@ -43,6 +43,24 @@ Last updated: 2026-04-30
 - Added CUDA event timing and shape arguments to row-wise softmax and layernorm labs
 - Ran softmax and layernorm row-wise labs against CPU references
 - Captured row-width benchmark results in `benchmarks/softmax-layernorm-rowwise.csv`
+- Added `notes/day-05-llm-hotspot-map.md` mapping `GEMM / softmax / layernorm / attention`
+- Ran `labs/framework/01_torch_custom_op/test_op.py`
+- Verified PyTorch custom CUDA SAXPY op with `max_error=0.00000095`
+- Added `notes/day-06-framework-bridge.md` explaining the Python -> C++ -> CUDA path
+- Ran `labs/triton/01_vector_add/vector_add.py`
+- Verified Triton vector add with `max_error=0.00000000`
+- Ran `labs/triton/02_fused_softmax/fused_softmax.py`
+- Verified Triton fused softmax with `max_error=0.00000001`
+- Added `notes/day-06-triton-kernels.md` describing what Triton abstracts compared with raw CUDA
+- Chose capstone direction: Triton fused softmax
+- Added `labs/triton/02_fused_softmax/benchmark_softmax.py`
+- Added `notes/capstone-triton-fused-softmax.md`
+- Ran Triton fused softmax capstone benchmark across seven shapes
+- Captured best Triton result so far: `4096x1024`, `0.0863 ms`, `1.21x` vs PyTorch
+- Added `sweep_num_warps.py` to test Triton softmax with `num_warps` in `1/2/4/8`
+- Ran `sweep_num_warps.py`
+- Captured best sweep result: `4096x1024`, `num_warps=4`, `0.0856 ms`, `1.01x` vs PyTorch
+- Reviewed the Triton fused softmax capstone summary and explained the main conclusions
 - Built a first-pass understanding of:
   - `<<<blocks, threads>>>`
   - `threadIdx`, `blockIdx`, `blockDim`
@@ -60,11 +78,8 @@ Last updated: 2026-04-30
 
 ## Next steps
 
-- Continue Day 5:
-  - explain stable softmax from memory
-  - map attention to `matmul + softmax + matmul`
-  - expand the hotspot map for `GEMM / softmax / layernorm / attention`
-  - choose a capstone direction soon
+- Start capstone:
+  - optionally rerun clean benchmark once for final numbers
 
 ## Sprint plan
 
@@ -74,8 +89,11 @@ Last updated: 2026-04-30
 - Day 3 status: completed
 - Day 4 status: completed at sprint level
 - Day 4 target: benchmark/profiling evidence for naive vs tiled matmul
-- Day 5 status: started
+- Day 5 status: completed at sprint level
 - Day 5 target: softmax, layernorm, and attention bottlenecks
+- Day 6 status: completed at sprint level
+- Day 6 target: framework bridge, Triton kernels, and capstone choice
+- Capstone status: first pass completed
 
 ## Weekly review seed
 

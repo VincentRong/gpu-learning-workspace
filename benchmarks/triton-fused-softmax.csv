@@ -1,0 +1,8 @@
+date,lab,input_shape,torch_softmax_ms,triton_softmax_ms,speedup_vs_torch,correct,max_error,notes
+2026-05-02,triton_fused_softmax,1024x128,0.0123,0.0376,0.33,yes,0.00000003,average over 50 launches after 10 warmup launches
+2026-05-02,triton_fused_softmax,1024x256,0.0127,0.0312,0.41,yes,0.00000001,average over 50 launches after 10 warmup launches
+2026-05-02,triton_fused_softmax,1024x512,0.0159,0.0307,0.52,yes,0.00000003,average over 50 launches after 10 warmup launches
+2026-05-02,triton_fused_softmax,1024x1024,0.0232,0.0318,0.73,yes,0.00000001,average over 50 launches after 10 warmup launches
+2026-05-02,triton_fused_softmax,4096x256,0.0249,0.0321,0.78,yes,0.00000003,average over 50 launches after 10 warmup launches
+2026-05-02,triton_fused_softmax,4096x512,0.0456,0.0457,1.00,yes,0.00000001,average over 50 launches after 10 warmup launches
+2026-05-02,triton_fused_softmax,4096x1024,0.0863,0.1066,0.81,yes,0.00000001,average over 50 launches after 10 warmup launches

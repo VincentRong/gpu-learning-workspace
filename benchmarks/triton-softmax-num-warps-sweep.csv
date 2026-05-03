@@ -1,0 +1,25 @@
+date,input_shape,num_warps,torch_softmax_ms,triton_softmax_ms,speedup_vs_torch,correct,max_error,notes
+2026-05-02,1024x256,1,0.0131,0.0312,0.42,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x256,2,0.0131,0.0323,0.41,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x256,4,0.0131,0.0346,0.38,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x256,8,0.0131,0.0297,0.44,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x512,1,0.0181,0.0303,0.60,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x512,2,0.0181,0.0292,0.62,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x512,4,0.0181,0.0280,0.65,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x512,8,0.0181,0.0294,0.62,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x1024,1,0.0240,0.0290,0.83,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x1024,2,0.0240,0.0537,0.45,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x1024,4,0.0240,0.0290,0.83,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,1024x1024,8,0.0240,0.0325,0.74,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x256,1,0.0282,0.0289,0.98,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x256,2,0.0282,0.0338,0.84,yes,0.00000003,average over 100 launches after 20 warmup launches
+2026-05-02,4096x256,4,0.0282,0.0326,0.87,yes,0.00000002,average over 100 launches after 20 warmup launches
+2026-05-02,4096x256,8,0.0282,0.0293,0.96,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x512,1,0.0438,0.0669,0.65,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x512,2,0.0438,0.0854,0.51,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x512,4,0.0438,0.0456,0.96,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x512,8,0.0438,0.0459,0.95,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x1024,1,0.0866,0.0933,0.93,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x1024,2,0.0866,0.0944,0.92,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x1024,4,0.0866,0.0856,1.01,yes,0.00000001,average over 100 launches after 20 warmup launches
+2026-05-02,4096x1024,8,0.0866,0.0922,0.94,yes,0.00000001,average over 100 launches after 20 warmup launches

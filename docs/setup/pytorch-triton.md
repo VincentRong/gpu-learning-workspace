@@ -49,9 +49,12 @@ PY
 
 ## Suggested package order
 
-1. Create and activate `.venv`
+1. Create and activate `.venv` (or `pytorch-cuda`)
 2. Install PyTorch
 3. Verify `torch.cuda.is_available()`
 4. Install Triton
 5. Run a very small Triton example before trying fused softmax
+
+## Usage:
+source ~/pytorch-cuda/bin/activate
 
